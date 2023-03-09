@@ -1,3 +1,17 @@
 /*
 * Feuille de style du carrousel
-*//*# sourceMappingURL=style.css.map */
+*/
+.carrousel {
+  position: fixed;
+  width: 50%;
+  height: 50%;
+  top: 25%;
+  left: 25%;
+  transform: scale(0);
+  transition: transform 0.5s;
+  background-color: orange;
+}
+
+.carrousel--ouvrir {
+  transform: scale(1);
+}/*# sourceMappingURL=style.css.map */
