@@ -1,3 +1,8 @@
+/**
+ * pour créer une fonction IFEE ça prends:
+ * ()() deux parenthèses pour commencer
+ * (function(){})() la function(){} dans la première parenthèse et la seconde vide, pour l'instant j'imagine
+ */
 (function(){
     // fonction IFEE
     console.log("début du carrousel");
@@ -40,7 +45,8 @@
     function ajouterCarrousel(){
 
         for(const elmIMG of elmGalerie__images){
-
+            elmIMG.addEventListener("click", function(e){
+            })
             ajouterImage(elmIMG);
             ajouterRadio(); // ajout des radio buttons dans le carrousel
         }
