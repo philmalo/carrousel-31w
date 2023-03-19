@@ -5,21 +5,32 @@
 // conteneur principal
 .carrousel{
     position: fixed;
-    width: 100vw;
-    height: 30%;
-    top: 150px;
+    top: 25%;
     left: 0;
+
+    width: 100vw;
+    aspect-ratio: 16/9;
+    
+    background-color: orange;
+
     transform: scale(0);
     transition: transform .5s;
-    background-color: orange;
+
     z-index: 1;
 }
 
-@media (min-width: 500px){
+// positionnement de la boîte à partir de 900px
+@media (min-width: 900px){
+    .carrousel{
+        width: 75%;
+        left: 12.5%;
+    }
+}
+
+// positionnement de la boîte à partir de 1281px
+@media (min-width: 1281px){
     .carrousel{
         width: 50%;
-        height: 50%;
-        top: 25%;
         left: 25%;
     }
 }
@@ -29,31 +40,35 @@
     transform: scale(1);
 }
 
-// bouton de fermeture de la boîte modale
+// apparence générale des boutons
+.carrousel button{
+    width: 40px;
+    height: 40px;
+    color: black;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    z-index: 1;
+}
+
+// bouton fermer
 .carrousel>button{
     position: absolute;
     top: 10px;
     right: 10px;
-    width: 40px;
-    height: 40px;
-    border: 1px solid #aaa;
-    border-radius: 5px;
-    color: black;
-    z-index: 1;
 }
 
+// bouton précédent
 .carrousel .precedent{
     position: fixed;
     left: 0;
     top: 50%;
-    z-index: 1; 
 }
 
+// bouton suivant
 .carrousel .suivant{
     position: fixed;
     right: 0;
     top: 50%;
-    z-index: 1;
 }
 
 // conteneur des images
@@ -61,6 +76,7 @@
     width: 100%;
     height: 100%;
 }
+
 
 .carrousel img{
     width: 100%;
