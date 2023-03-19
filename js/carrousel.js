@@ -1,97 +1,202 @@
-/**
- * pour créer une fonction IFEE ça prends:
- * ()() deux parenthèses pour commencer
- * (function(){})() la function(){} dans la première parenthèse et la seconde vide, pour l'instant j'imagine
- */
 (function(){
-    // fonction IFEE
-    console.log("début du carrousel");
 
-    let bouton__ouvrir = document.querySelector(".bouton__ouvrir");
+    // les queries
+    let carrousel = document.querySelector(".carrousel");
+    let btnFermerCarrousel = document.querySelector(".carrousel>button");
+    let btnsDeplacement = document.querySelectorAll(".deplacement")
+    let figureCarrousel = document.querySelector(".carrousel>figure");
+    let formCarrousel = document.querySelector(".carrousel>form");
+    let galerie = document.querySelector(".galerie");
+    let lesImages = galerie.querySelectorAll("img");
 
-    let elmCarrousel = document.querySelector(".carrousel");
-    let elmCarrousel__x = document.querySelector(".bouton__x");
-    let elmCarrousel__figure = document.querySelector(".carrousel__figure");
-    let elmCarrousel__form = document.querySelector(".carrousel__form");
-
-    let elmGalerie = document.querySelector(".galerie");
-    let elmGalerie__images = elmGalerie.querySelectorAll("img");
-
-    
-    console.log("bouton", bouton__ouvrir.tagName);
-    console.log("images galerie", elmGalerie__images);
-
-    
-    // écouteur pour l'ouverture du carrousel
-    bouton__ouvrir.addEventListener("mousedown", function(){
-        
-        console.log("boite modale");
-        
-        elmCarrousel.classList.add("carrousel--ouvrir");
-        
-        ajouterCarrousel();
-    })
-    
-    // écouteur pour la fermeture du carrousel
-    elmCarrousel__x.addEventListener("mousedown", function(){
-        
-        console.log("fermer boite modale");
-        
-        elmCarrousel.classList.remove("carrousel--ouvrir");
-        // delete elmCarrousel__radio;
-    })
-
-    // fonction qui ajoute les images contenus dans la galerie vers le carrousel
-    function ajouterCarrousel(){
-
-        for(const elmIMG of elmGalerie__images){
-            elmIMG.addEventListener("click", function(e){
-            })
-            ajouterImage(elmIMG);
-            ajouterRadio(); // ajout des radio buttons dans le carrousel
-        }
-        elmCarrousel__figure.children[0].classList.add("carrousel__img--activer")
-    }
-
-
-    // fonction qui ajoute la source de l'image dans un nouvel élément image créé
-    function ajouterImage(element){
-
-        let elmCarrousel__img = document.createElement("img");
-
-        elmCarrousel__img.setAttribute("src", element.getAttribute("src"));
-        
-        elmCarrousel__img.classList.add("carrousel__img");
-
-        elmCarrousel__img.dataset.index = index;
-
-        elmCarrousel__figure.appendChild(elmCarrousel__img);
-    }
-
+    // les variables
     let index = 0;
-    let index_precedent = -1;
+    let direction = "";
 
-    // fonction qui ajoute les boutons de navigation dans le carrousel
-    function ajouterRadio(){
-        let elmCarrousel__radio = document.createElement("input");
+    // event listener sur la fermeture de la boîte modale
+    btnFermerCarrousel.addEventListener("mousedown", function(){
 
-        elmCarrousel__radio.setAttribute("type", "radio");
-        elmCarrousel__radio.setAttribute("name", "radCarrousel");
-        elmCarrousel__radio.dataset.index = index;
+        carrousel.classList.remove("carrousel--ouvrir");
+        
+        for (enfant of figureCarrousel.children){
+
+            enfant.classList.remove("carrousel__img--activer");
+        }
+
+        index = 0;
+        direction = "";
+        formCarrousel.innerHTML = "";
+    })
+
+    for(const bouton of btnsDeplacement){
+
+        bouton.addEventListener("mousedown", function(e){
+
+            let imageIndex = 0;
+
+            images = e.target.parentElement.nextElementSibling.children;
+
+            for (image of images){
+
+                if (image.classList.contains("carrousel__img--activer")){
+
+                    imageIndex = image.dataset.index
+
+                }
+            }
+            if(e.target.classList.contains("suivant")){
+
+                direction = 1;
+            }
+
+            else{
+
+                direction = -1;
+            }
+
+            activerImage(imageIndex, direction);
+        })
+    }
+    // les fonctions
+
+    /**
+     * Fonction qui effectue l'ouverture du carrousel
+     * @param {string} image la valeur de data-index de l'image à afficher à l'ouverture du carrousel
+     */
+    function ouvrirCarrousel(imageIndex){
+
+        // pour empêcher la duplication des boutons en cliquant sur les images à l'extérieur du carrousel
+        if(!carrousel.classList.contains("carrousel--ouvrir")){
+
+            carrousel.classList.add("carrousel--ouvrir");
+
+            // pour rajouter les radios buttons lors de la fermeture et réouverture du carrousel/
+            if(formCarrousel.innerHTML == ""){
+
+                for(const image of lesImages){
+
+                    ajouterRadios();
+                }
+            }
+
+            activerImage(imageIndex);
+        }
+    }
+
+    /**
+     * Fonction qui active le bon bouton radio à l'image activée
+     * @param {string} imageIndex la valeur de l'index de l'image affichée à associer avec le bon bouton radio
+     */
+    function checkRadios(imageIndex){
+
+        let radios = document.querySelectorAll("[name='radioCarrousel']");
+
+        for(const radio of radios){
+
+            radio.checked = false;
+
+            if(imageIndex == radio.dataset.index){
+
+                radio.checked = true;
+            }
+        }
+    }
+
+    /**
+     * Fonction qui crée un élément img pour chaque image contenue dans la galerie
+     */
+    function ajouterImages(){
+
+        for (const image of lesImages){
+
+            let imageCarrousel = document.createElement("img");
+
+            imageCarrousel.setAttribute("src", image.getAttribute("src"));
+            imageCarrousel.dataset.index = index;
+            figureCarrousel.appendChild(imageCarrousel);
+
+            ajouterRadios();
+
+            // ajout d'un écouteur d'événement sur chaque image pour pouvoir ouvrir la boîte modale
+            image.addEventListener("mousedown",function(){
+
+                ouvrirCarrousel(imageCarrousel.dataset.index);
+            })
+        }
+    }
+
+    /**
+     * Fonction qui ajoute un bouton radio pour chaque image contenue dans la figure
+     */
+    function ajouterRadios(){
+
+        let radioCarrousel = document.createElement("input");
+
+        radioCarrousel.setAttribute("type", "radio");
+        radioCarrousel.setAttribute("name", "radioCarrousel");
+        radioCarrousel.dataset.index = index;
 
         index++;
 
-        elmCarrousel__form.appendChild(elmCarrousel__radio);
-        elmCarrousel__radio.addEventListener("mousedown", function(){
+        formCarrousel.appendChild(radioCarrousel);
+
+        radioCarrousel.addEventListener("mousedown", function(){
+
             activerImage(this.dataset.index);
         })
     }
 
-    function activerImage(index){
-        if(index_precedent != -1){
-            elmCarrousel__figure.children[index_precedent].classList.remove("carrousel__img--activer")
+    /**
+     * Fonction qui active l'affichage de l'image désirée
+     * @param {string} index la valeur de l'index de l'image à afficher
+     * @param {string} direction la direction du déplacement avec les flèches, soit 1 pour image suivante, -1 pour image précédente et "" par défaut lorsqu'on arrive de l'ouverture initiale de la fenêtre, ou des boutons radio
+     */
+    function activerImage(index, direction = ""){
+        if(direction == -1){
+
+            figureCarrousel.children[index].classList.remove("carrousel__img--activer");
+
+            if(parseInt(index) - 1 == - 1){
+
+                imageIndex = figureCarrousel.children.length - 1;
+            }
+
+            else{
+
+                imageIndex = parseInt(index) - 1;
+            }
+
+            figureCarrousel.children[imageIndex].classList.add("carrousel__img--activer");
+            checkRadios(imageIndex);
         }
-        elmCarrousel__figure.children[index].classList.add("carrousel__img--activer");
-        index_precedent = index;
+
+        if(direction == 1){
+            figureCarrousel.children[index].classList.remove("carrousel__img--activer");
+
+            if(parseInt(index) + 1 > figureCarrousel.children.length - 1){
+
+                imageIndex = 0;
+            }
+
+            else{
+
+                imageIndex = parseInt(index) + 1;
+            }
+
+            figureCarrousel.children[imageIndex].classList.add("carrousel__img--activer");
+            checkRadios(imageIndex);
+        }
+
+        if(direction == ""){
+            for (enfant of figureCarrousel.children){
+
+                enfant.classList.remove("carrousel__img--activer");
+            }
+
+            figureCarrousel.children[index].classList.add("carrousel__img--activer");
+            checkRadios(index);
+        }
     }
+
+    ajouterImages();
 })();

@@ -40,11 +40,14 @@
 
     function creation_carrousel(){
         return '
-                <button class="bouton__ouvrir">Ouvrir</button>
                 <div class="carrousel">
-                    <button class="bouton__x">X</button>
-                    <figure class="carrousel__figure"></figure>
-                    <form class="carrousel__form"></form>
+                    <button>X</button>
+                    <div>
+                        <button class="deplacement precedent"><</button>
+                        <button class="deplacement suivant">></button>
+                    </div>
+                    <figure></figure>
+                    <form></form>
                 </div>
                 ';
     }

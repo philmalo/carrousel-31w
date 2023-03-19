@@ -5,10 +5,9 @@
 // conteneur principal
 .carrousel{
     position: fixed;
-    // TODO version mobile devrait être genre 100% via un media query
     width: 100vw;
-    height: auto;
-    top: 0;
+    height: 30%;
+    top: 150px;
     left: 0;
     transform: scale(0);
     transition: transform .5s;
@@ -31,7 +30,7 @@
 }
 
 // bouton de fermeture de la boîte modale
-.bouton__x{
+.carrousel>button{
     position: absolute;
     top: 10px;
     right: 10px;
@@ -40,19 +39,32 @@
     border: 1px solid #aaa;
     border-radius: 5px;
     color: black;
-    z-index: 2;
+    z-index: 1;
+}
+
+.carrousel .precedent{
+    position: fixed;
+    left: 0;
+    top: 50%;
+    z-index: 1; 
+}
+
+.carrousel .suivant{
+    position: fixed;
+    right: 0;
+    top: 50%;
+    z-index: 1;
 }
 
 // conteneur des images
-.carrousel__figure{
+.carrousel figure{
     width: 100%;
     height: 100%;
-    position: relative;
 }
 
-.carrousel__img{
+.carrousel img{
     width: 100%;
-    height: auto;
+    height: 100%;
     position: absolute;
     top: 0;
     left: 0;
@@ -61,24 +73,18 @@
     object-fit: cover;
 }
 
-.carrousel__img--activer{
+img.carrousel__img--activer{
     opacity: 1;
 }
 
-
-.bouton__ouvrir{
-    width: fit-content;
-    color: black;
-}
-
 // conteneur des boutons radio
-.carrousel__form{
+.carrousel form{
+    display: flex;
+    gap: 5px;
+    justify-content: center;
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 30px;
-    display: flex;
-    justify-content: center;
-    z-index: 2;
 }
